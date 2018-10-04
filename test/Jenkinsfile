@@ -11,6 +11,9 @@ timestamps {
     env.ghprbPullAuthorLogin = env.ghprbPullAuthorLogin ?: ''
     env.ghprbPullId = env.ghprbPullId ?: ''
 
+    env.AUTHOR_REPO_URL= env.ghprbAuthorRepoGitUrl ?: 'https://github.com/CentOS-PaaS-SIG/contra-env-sample-project.git'
+    env.PULL_ID= env.ghprbPullId ?: ''
+
     // Needed for podTemplate()
     env.SLAVE_TAG = env.SLAVE_TAG ?: 'stable'
     env.SAMPLEPROJECTTEST_C7_TAG = env.SAMPLEPROJECTTEST_C7_TAG ?: 'stable'
@@ -87,6 +90,9 @@ timestamps {
                                     string(name: 'ghprbPullId',
                                             defaultValue: '',
                                             description: 'Pull Request Number'),
+                                    string(name: 'ghprbAuthorRepoGitUrl',
+                                            defaultValue: '',
+                                            description: 'Pull Request Author repo url'),
                                     string(name: 'ghprbPullAuthorLogin',
                                             defaultValue: '',
                                             description: 'Pull Request Author username'),

@@ -190,3 +190,12 @@ def handlePipelineStep(Map config, Closure body) {
         }
     }
 }
+
+
+/**
+ * Function to return the job name
+ * @return
+ */
+def timedMeasurement() {
+    return env.JOB_NAME
+}

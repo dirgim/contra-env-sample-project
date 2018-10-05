@@ -77,4 +77,17 @@ class samplePipelineUtils implements Serializable {
             samplePipelineUtils.handlePipelineStep(config, body)
         }
     }
+
+    /**
+     * Function to return the job name
+     * @return
+     */
+    def timedMeasurement() {
+        return "${influxDBPrefix()}_${envsetupUtils.timedMeasurement()}"
+    }
+
+    def influxDBPrefix() {
+        return "contra-env-sample-project-ci-pipeline"
+    }
+
 }

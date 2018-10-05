@@ -83,7 +83,7 @@ class samplePipelineUtils implements Serializable {
      * @return
      */
     def timedMeasurement() {
-        return "${influxDBPrefix()}_${envsetupUtils.timedMeasurement()}"
+        return "${influxDBPrefix()}_${samplePipelineUtils.timedMeasurement()}"
     }
 
     def influxDBPrefix() {

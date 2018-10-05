@@ -142,9 +142,9 @@ timestamps {
             {
                 node(podName) {
 
-                    ciMetrics.prefix = envsetupUtils.influxDBPrefix()
-                    envsetupUtils.cimetrics = ciMetrics
-                    def jobMeasurement = envsetupUtils.timedMeasurement()
+                    ciMetrics.prefix = samplePipelineUtils.influxDBPrefix()
+                    samplePipelineUtils.cimetrics = ciMetrics
+                    def jobMeasurement = samplePipelineUtils.timedMeasurement()
 
                     def buildResult = null
 
@@ -201,7 +201,7 @@ timestamps {
                                 // set the metrics we want
                                 ciMetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
                                 ciMetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
-                                
+
                                 // Archive JUnit results
                                 step([$class: 'JUnitResultArchiver', testResults: '*.xml'])
 

@@ -41,7 +41,7 @@ timestamps {
 
     library identifier: "contra-env-sample-project@${env.ghprbActualCommit}",
             retriever: modernSCM([$class: 'GitSCMSource',
-                                  remote: "https://github.com/${env.ghprbGhRepository}.git",
+                                  remote: "https://github.com/dirgim/contra-env-sample-project.git",
                                   traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'],
                                            [$class: 'RefSpecsSCMSourceTrait',
                                             templates: [[value: '+refs/heads/*:refs/remotes/@{remote}/*'],

@@ -44,7 +44,7 @@ class samplePipelineUtils implements Serializable {
      * @return
      */
     def setDefaultEnvVars(Map envMap = null) {
-        envsetupUtils.setDefaultEnvVars(envMap)
+        samplePipelineUtils.setDefaultEnvVars(envMap)
     }
 
     /**
@@ -53,7 +53,7 @@ class samplePipelineUtils implements Serializable {
      * @return
      */
     def setStageEnvVars(String stage) {
-        envsetupUtils.setStageEnvVars(stage)
+        samplePipelineUtils.setStageEnvVars(stage)
     }
 
 
@@ -63,7 +63,7 @@ class samplePipelineUtils implements Serializable {
      */
     def ciPipeline(Closure body) {
         try {
-            envsetupUtils.ciPipeline(body)
+            samplePipelineUtils.ciPipeline(body)
         } catch(e) {
             throw e
         } finally {
@@ -73,8 +73,8 @@ class samplePipelineUtils implements Serializable {
 
     def timedPipelineStep(Map config, Closure body) {
         def measurement = timedMeasurement()
-        cimetrics.timed measurement, config.stepName, {
-            envsetupUtils.handlePipelineStep(config, body)
+        samplePipelineUtils.timed measurement, config.stepName, {
+            samplePipelineUtils.handlePipelineStep(config, body)
         }
     }
 }

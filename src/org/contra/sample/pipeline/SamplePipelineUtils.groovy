@@ -146,6 +146,7 @@ def setStageEnvVars(String stage){
                     PROJECT_REPO        : env.PROJECT_REPO,
                     PR_NUM              : env.ghprbPullId,
                     ACTUAL_COMMIT       : env.ghprbActualCommit,
+                    AUTHOR_REPO_URL       : env.ghprbAuthorRepoGitUrl,
             ],
             ]
 

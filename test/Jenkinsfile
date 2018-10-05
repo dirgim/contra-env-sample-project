@@ -7,12 +7,12 @@
 
 timestamps {
     env.ghprbGhRepository = env.ghprbGhRepository ?: 'CentOS-PaaS-SIG/contra-env-sample-project'
-    env.ghprbActualCommit = env.ghprbActualCommit ?: 'sample-project-ci'
+    env.ghprbActualCommit = env.ghprbActualCommit ?: 'master'
     env.ghprbPullAuthorLogin = env.ghprbPullAuthorLogin ?: ''
     env.ghprbPullId = env.ghprbPullId ?: ''
 
     env.AUTHOR_REPO_URL= env.ghprbAuthorRepoGitUrl ?: 'https://github.com/CentOS-PaaS-SIG/contra-env-sample-project.git'
-    env.PULL_ID= env.ghprbPullId ?: ''
+    env.PR_NUM= env.ghprbPullId ?: ''
 
     // Needed for podTemplate()
     env.SLAVE_TAG = env.SLAVE_TAG ?: 'stable'
@@ -39,7 +39,7 @@ timestamps {
                                       remote: repo[1]])
     }
 
-    library identifier: "contra-env-sample-project@${env.ghprbActualCommit}",
+    library identifier: "contra-env-sample-project@sample-project-ci",
             retriever: modernSCM([$class: 'GitSCMSource',
                                   remote: "https://github.com/dirgim/contra-env-sample-project.git",
                                   traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'],

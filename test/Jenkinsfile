@@ -142,6 +142,10 @@ timestamps {
             {
                 node(podName) {
 
+                    ciMetrics.prefix = envsetupUtils.influxDBPrefix()
+                    envsetupUtils.cimetrics = ciMetrics
+                    def jobMeasurement = envsetupUtils.timedMeasurement()
+
                     def buildResult = null
 
                     timeout(time: 3, unit: 'HOURS') {
@@ -194,6 +198,10 @@ timestamps {
                                 // Archive our artifacts
                                 step([$class: 'ArtifactArchiver', allowEmptyArchive: true, artifacts: '*.xml,*.log,**/job.*,**/inventory.*', excludes: '**/*.example', fingerprint: true])
 
+                                // set the metrics we want
+                                ciMetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
+                                ciMetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
+                                
                                 // Archive JUnit results
                                 step([$class: 'JUnitResultArchiver', testResults: '*.xml'])
 

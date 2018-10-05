@@ -149,17 +149,7 @@ timestamps {
                         def currentStage = ""
 
                         samplePipelineUtils.ciPipeline {
-                            // We need to set env.HOME because the openshift slave image
-                            // forces this to /home/jenkins and then ~ expands to that
-                            // even though id == "root"
-                            // See https://github.com/openshift/jenkins/blob/master/slave-base/Dockerfile#L5
-                            //
-                            // Even the kubernetes plugin will create a pod with containers
-                            // whose $HOME env var will be its workingDir
-                            // See https://github.com/jenkinsci/kubernetes-plugin/blob/master/src/main/java/org/csanchez/jenkins/plugins/kubernetes/KubernetesLauncher.java#L311
-                            //
                             env.HOME = "/root"
-                            //
                             try {
                                 // Prepare our environment
                                 currentStage = "prepare-environment"
@@ -177,12 +167,12 @@ timestamps {
 
                                 currentStage = "test-contra-env-sample-project"
                                 stage(currentStage) {
-                                    samplePipelineUtils.timedPipelineStep(stepName: "${currentStage}-centos7", debug: true) {
+                                    samplePipelineUtils.timedPipelineStep('stepName': currentStage, 'debug': true) {
                                         // Set stage specific vars
                                         samplePipelineUtils.setStageEnvVars(currentStage)
 
                                         // Run contra-env-sample-project test
-                                        samplePipelineUtils.executeInContainer("${currentStage}", "contra-env-sample-project-test-c7", "/home/prepare_and_test.sh")
+                                        samplePipelineUtils.executeInContainer(currentStage, "contra-env-sample-project-test-c7", "/home/prepare_and_test.sh")
                                     }
                                 }
                             } catch (e) {
@@ -199,7 +189,7 @@ timestamps {
 
                             } finally {
                                 currentBuild.result = buildResult ?: 'SUCCESS'
-                                pipelineUtils.getContainerLogsFromPod(OPENSHIFT_NAMESPACE, env.NODE_NAME)
+                                samplePipelineUtils.getContainerLogsFromPod(OPENSHIFT_NAMESPACE, env.NODE_NAME)
 
                                 // Archive our artifacts
                                 step([$class: 'ArtifactArchiver', allowEmptyArchive: true, artifacts: '*.xml,*.log,**/job.*,**/inventory.*', excludes: '**/*.example', fingerprint: true])

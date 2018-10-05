@@ -7,6 +7,7 @@ import org.contra.sample.pipeline.SamplePipelineUtils
 class samplePipelineUtils implements Serializable {
 
     def samplePipelineUtils = new SamplePipelineUtils()
+    def cimetrics
 
     /**
      *
@@ -73,7 +74,7 @@ class samplePipelineUtils implements Serializable {
 
     def timedPipelineStep(Map config, Closure body) {
         def measurement = timedMeasurement()
-        samplePipelineUtils.timed measurement, config.stepName, {
+        cimetrics.timed measurement, config.stepName, {
             samplePipelineUtils.handlePipelineStep(config, body)
         }
     }

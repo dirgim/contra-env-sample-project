@@ -37,4 +37,44 @@ class samplePipelineUtils implements Serializable {
     def sendIRCNotification(String nick, String channel, String message, String ircServer="irc.freenode.net:6697") {
         samplePipelineUtils.sendIRCNotification(nick, channel, message, ircServer)
     }
+
+    /**
+     * Method to set default environmental variables. Performed once at start of Jenkinsfile
+     * @param envMap Key/value pairs which will be set as environmental variables.
+     * @return
+     */
+    def setDefaultEnvVars(Map envMap = null) {
+        envsetupUtils.setDefaultEnvVars(envMap)
+    }
+
+    /**
+     * Method to set stage specific environmental variables.
+     * @param stage Current stage
+     * @return
+     */
+    def setStageEnvVars(String stage) {
+        envsetupUtils.setStageEnvVars(stage)
+    }
+
+
+    /**
+     * Wrap the pipeline with timestamps and ansiColor
+     * @param body Pipeline goes in here
+     */
+    def ciPipeline(Closure body) {
+        try {
+            envsetupUtils.ciPipeline(body)
+        } catch(e) {
+            throw e
+        } finally {
+            //cimetrics.writeToInflux()
+        }
+    }
+
+    def timedPipelineStep(Map config, Closure body) {
+        def measurement = timedMeasurement()
+        cimetrics.timed measurement, config.stepName, {
+            envsetupUtils.handlePipelineStep(config, body)
+        }
+    }
 }

@@ -142,18 +142,13 @@ timestamps {
             {
                 node(podName) {
 
-                    // pull in ciMetrics from ci-pipeline
-                    ciMetrics.prefix = envsetupUtils.influxDBPrefix()
-                    envsetupUtils.cimetrics = ciMetrics
-                    def jobMeasurement = envsetupUtils.timedMeasurement()
-
                     def buildResult = null
 
                     timeout(time: 3, unit: 'HOURS') {
 
                         def currentStage = ""
 
-                        envsetupUtils.ciPipeline {
+                        samplePipelineUtils.ciPipeline {
                             // We need to set env.HOME because the openshift slave image
                             // forces this to /home/jenkins and then ~ expands to that
                             // even though id == "root"
@@ -170,13 +165,13 @@ timestamps {
                                 currentStage = "prepare-environment"
                                 stage(currentStage) {
 
-                                    envsetupUtils.timedPipelineStep('stepName': currentStage, 'debug': true) {
+                                    samplePipelineUtils.timedPipelineStep('stepName': currentStage, 'debug': true) {
 
                                         deleteDir()
                                         // Set our default env variables
-                                        envsetupUtils.setDefaultEnvVars()
+                                        samplePipelineUtils.setDefaultEnvVars()
                                         // Gather some info about the node we are running on for diagnostics
-                                        pipelineUtils.verifyPod(OPENSHIFT_NAMESPACE, env.NODE_NAME)
+                                        samplePipelineUtils.verifyPod(OPENSHIFT_NAMESPACE, env.NODE_NAME)
                                     }
                                 }
 
@@ -185,12 +180,12 @@ timestamps {
                                     parallel (
                                         'centos7': {
                                             stage("${currentStage}-centos7") {
-                                                envsetupUtils.timedPipelineStep(stepName: "${currentStage}-centos7", debug: true) {
+                                                samplePipelineUtils.timedPipelineStep(stepName: "${currentStage}-centos7", debug: true) {
                                                     // Set stage specific vars
-                                                    envsetupUtils.setStageEnvVars(currentStage)
+                                                    samplePipelineUtils.setStageEnvVars(currentStage)
 
                                                     // Run contra-env-sample-project test
-                                                    pipelineUtils.executeInContainer("${currentStage}-centos7", "contra-env-sample-project-test-c7", "/home/prepare_and_test.sh")
+                                                    samplePipelineUtils.executeInContainer("${currentStage}-centos7", "contra-env-sample-project-test-c7", "/home/prepare_and_test.sh")
                                                 }
                                             }
                                         },
@@ -214,10 +209,6 @@ timestamps {
 
                                 // Archive our artifacts
                                 step([$class: 'ArtifactArchiver', allowEmptyArchive: true, artifacts: '*.xml,*.log,**/job.*,**/inventory.*', excludes: '**/*.example', fingerprint: true])
-
-                                // set the metrics we want
-                                ciMetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
-                                ciMetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
 
                                 // Archive JUnit results
                                 step([$class: 'JUnitResultArchiver', testResults: '*.xml'])

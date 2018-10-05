@@ -177,19 +177,13 @@ timestamps {
 
                                 currentStage = "test-contra-env-sample-project"
                                 stage(currentStage) {
-                                    parallel (
-                                        'centos7': {
-                                            stage("${currentStage}-centos7") {
-                                                samplePipelineUtils.timedPipelineStep(stepName: "${currentStage}-centos7", debug: true) {
-                                                    // Set stage specific vars
-                                                    samplePipelineUtils.setStageEnvVars(currentStage)
+                                    samplePipelineUtils.timedPipelineStep(stepName: "${currentStage}-centos7", debug: true) {
+                                        // Set stage specific vars
+                                        samplePipelineUtils.setStageEnvVars(currentStage)
 
-                                                    // Run contra-env-sample-project test
-                                                    samplePipelineUtils.executeInContainer("${currentStage}-centos7", "contra-env-sample-project-test-c7", "/home/prepare_and_test.sh")
-                                                }
-                                            }
-                                        },
-                                    )
+                                        // Run contra-env-sample-project test
+                                        samplePipelineUtils.executeInContainer("${currentStage}", "contra-env-sample-project-test-c7", "/home/prepare_and_test.sh")
+                                    }
                                 }
                             } catch (e) {
                                 // Set build result

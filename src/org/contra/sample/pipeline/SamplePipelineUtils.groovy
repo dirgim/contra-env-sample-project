@@ -142,7 +142,7 @@ def setDefaultEnvVars(Map envMap=null){
  */
 def setStageEnvVars(String stage){
     def stages =
-            ["test-env-setup"       : [
+            ["test-contra-env-sample-project"       : [
                     PROJECT_REPO        : env.PROJECT_REPO,
                     PR_NUM              : env.ghprbPullId,
                     ACTUAL_COMMIT       : env.ghprbActualCommit,

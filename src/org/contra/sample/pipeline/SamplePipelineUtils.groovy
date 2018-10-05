@@ -144,9 +144,9 @@ def setStageEnvVars(String stage){
     def stages =
             ["test-contra-env-sample-project"       : [
                     PROJECT_REPO        : env.PROJECT_REPO,
-                    PR_NUM              : env.ghprbPullId,
-                    ACTUAL_COMMIT       : env.ghprbActualCommit,
-                    AUTHOR_REPO_URL       : env.ghprbAuthorRepoGitUrl,
+                    PR_NUM              : env.PR_NUM,
+                    AUTHOR_REPO_URL     : env.AUTHOR_REPO_URL,
+                    SOURCE_BRANCH       : env.SOURCE_BRANCH,
             ],
             ]
 
